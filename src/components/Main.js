@@ -1,50 +1,29 @@
-import api from '../utils/Api.js';
 import React from 'react';
 import Card from './Card';
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js'; 
 
 
-function Main(props) {
+function Main({onCardClick, onCardLike, onCardDelete, isEditAvatar, onEditProfile, isAddPlacePopupOpen, cards}) {
 
-  const [userName, setUserName] = React.useState(null);
-  const [userDescription, setUserDescription] = React.useState(null);
-  const [userAvatar, setUserAvatar] = React.useState(null);
-  const [cards, setCards] = React.useState([]);
-
-  React.useEffect(() => {
-    api.getUserInfo().then((data) => {
-      setUserName(data.name)
-      setUserDescription(data.about)
-      setUserAvatar(data.avatar)
-    })
-    .catch((err) => 
-      console.error(err));
-  }, []);
-
-  React.useEffect(() => {
-    api.getInitialCards().then((data) => {
-      setCards(data)
-    })
-    .catch((err) => 
-      console.error(err));
-  }, []);
+  const currentUser = React.useContext(CurrentUserContext);
 
   const renderCard = (card) => {
-    return <Card card={card} key={card._id} onCardClick={props.onCardClick}/>
+    return <Card card={card} key={card._id} onCardClick={onCardClick} onCardLike={onCardLike} onCardDelete={onCardDelete} />
   }
 
   return(
     <main className="content">
       <section className="profile">
-        <img src={userAvatar} alt="Фотография Жак-Ив Кусто" className="profile__avatar" />
-        <div className="profile__edit-avatar" onClick={props.isEditAvatarPopupOpen}></div>
+        <img src={currentUser.avatar} alt="Фотография Жак-Ив Кусто" className="profile__avatar" />
+        <div className="profile__edit-avatar" onClick={isEditAvatar}></div>
         <div className="profile__info">
           <div className="profile__name-panel">
-            <h1 className="profile__name">{userName}</h1>
-            <button type="button" className="profile__button" aria-label="Редактировать" onClick={props.onEditProfile}></button>
+            <h1 className="profile__name">{currentUser.name}</h1>
+            <button type="button" className="profile__button" aria-label="Редактировать" onClick={onEditProfile}></button>
           </div>
-        <p className="profile__about">{userDescription}</p>
+        <p className="profile__about">{currentUser.about}</p>
         </div>
-        <button type="button" className="profile__add-button" aria-label="Добавить" onClick={props.isAddPlacePopupOpen}></button>
+        <button type="button" className="profile__add-button" aria-label="Добавить" onClick={isAddPlacePopupOpen}></button>
       </section>
 
       <section className="cards">
