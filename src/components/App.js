@@ -116,7 +116,6 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className='root'>
-        <div className="App">
 
           <Header/>
 
@@ -136,7 +135,6 @@ function App() {
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
 
         </div>
-      </div>
     </CurrentUserContext.Provider>
   );
 }
